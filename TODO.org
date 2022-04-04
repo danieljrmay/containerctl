@@ -1,0 +1,5 @@
+#+TITLE: containerctl To do List
+* DONE Bullet proof ~containerctl~ command line arguments.
+  CLOSED: [2022-03-24 Thu 12:50]
+* NEXT Go through image creation script.
+* TODO Create ~destroy-image~ command.

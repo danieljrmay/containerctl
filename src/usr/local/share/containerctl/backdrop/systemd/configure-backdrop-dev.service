@@ -1,0 +1,11 @@
+[Unit]
+Description=Configure Backdrop for development
+After=mariadb.service
+ConditionPathExists=!/var/lock/configure-backdrop-dev.lock
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/configure-backdrop-dev
+
+[Install]
+WantedBy=multi-user.target
