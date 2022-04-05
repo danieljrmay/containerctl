@@ -31,6 +31,12 @@ else
 	exit 1
 fi
 
+exec_create_container() {
+	debug "In exec_create_container() with arguments $*"
+
+	error "exec_create_container not implemented yet"
+}
+
 exec_create_image() {
 	debug "In exec_create_image() with arguments $*"
 
@@ -116,6 +122,7 @@ exec_help() {
 	echo -e "\t-V, --version\tPrint version information"
 	echo
 	echo 'Commands:'
+	echo -e "\tcreate-container\t\tCreate a container from an image"
 	echo -e "\tcreate-image\t\tCreate a container image"
 	echo -e "\tinit-host\t\tInitialize the container host machine"
 	echo -e "\tlist-image-recipes\tList the available image recipes"
@@ -134,6 +141,12 @@ exec_version() {
 # Process the command line arguments
 while true; do
 	case "$1" in
+	'create-container')
+		shift
+		debug "create-container command detected with arguments: $*"
+		exec_create_container "$@"
+		exit $?
+		;;
 	'create-image')
 		shift
 		debug "create-image command detected with arguments: $*"

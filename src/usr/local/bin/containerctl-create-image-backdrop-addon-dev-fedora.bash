@@ -84,7 +84,7 @@ fi
 verbose "Pull the latest version of Fedora"
 buildah pull registry.fedoraproject.org/fedora:latest
 
-verbose "Create a new image based on the latest version CentOS Stream 8"
+verbose "Create a new image based on the latest version fedora"
 buildah from --name "$image" registry.fedoraproject.org/fedora:latest
 
 verbose "Install RPMs and clean up"
@@ -131,6 +131,9 @@ buildah config --cmd "/usr/sbin/init" "$image"
 
 verbose "Commit the image"
 buildah commit "$image" "$image"
+
+verbose "Delete the container"
+buildah rm "$image"
 
 verbose "Done"
 exit $_exit_status_ok

@@ -52,7 +52,11 @@ info "HOST_CUSTOM_THEMES_DIR=$HOST_CUSTOM_THEMES_DIR"
 
 check_image_exists "$image"
 
-# TODO create the secret if if does not already exist
+verbose "Removing backdrop-dev secret"
+podman secret rm backdrop-dev >/dev/null 2>&1
+
+verbose "Creating backdrop-dev secret"
+podman secret create backdrop-dev "$backdrop_dir/backdrop-dev.secrets"
 
 verbose "Create the container"
 podman run \
@@ -63,6 +67,9 @@ podman run \
 	--publish "8080:80" \
 	--detach \
 	$image
+
+verbose "Delete the container"
+buildah rm "$image"
 
 verbose "Done"
 exit $_exit_status_ok
