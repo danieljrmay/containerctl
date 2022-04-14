@@ -96,6 +96,7 @@ buildah run "$image" -- apt --yes install \
 	mariadb-server \
 	php \
 	php-curl \
+	php-fpm \
 	php-gd \
 	php-json \
 	php-mbstring \
@@ -108,12 +109,12 @@ buildah run "$image" -- apt --yes clean
 
 # TODO remove /var/www/html/index.html
 
-verbose "Enable the apache rewrite module"
-buildah run "$image" -- a2enmod rewrite
+verbose "Enable the apache modules"
+buildah run "$image" -- a2enmod proxy_fcgi rewrite
 
 verbose "Copy the backdrop files"
 buildah copy "$image" "${backdrop_unzip_dir}/backdrop" /var/www/html
-buildah copy "$image" "${backdrop_dir}/apache/backdrop.conf" /etc/apache2/conf-available/backdrop-add-on-devel.conf
+buildah copy "$image" "${backdrop_dir}/apache/backdrop-debian.conf" /etc/apache2/conf-available/backdrop-addon-dev.conf
 buildah copy "$image" "${backdrop_dir}/systemd/configure-backdrop-dev.bash" /usr/local/bin/configure-backdrop-dev
 buildah copy "$image" "${backdrop_dir}/systemd/configure-backdrop-dev.service" /etc/systemd/system/configure-backdrop-dev.service
 
@@ -124,10 +125,10 @@ buildah run "$image" -- chmod a+x /usr/local/bin/configure-backdrop-dev
 
 verbose "Enable services"
 # TODO tidy up symlink
-buildah run "$image" -- ln -s /etc/apache2/conf-available/backdrop-add-on-devel.conf /etc/apache2/conf-enabled/backdrop-add-on-devel.conf
+buildah run "$image" -- ln -s /etc/apache2/conf-available/backdrop-addon-dev.conf /etc/apache2/conf-enabled/backdrop-addon-dev.conf
 buildah run "$image" -- systemctl enable apache2.service
 buildah run "$image" -- systemctl enable mariadb.service
-#buildah run "$image" -- systemctl enable php-fpm.service
+buildah run "$image" -- systemctl enable php7.4-fpm.service
 buildah run "$image" -- systemctl enable configure-backdrop-dev.service
 
 verbose "Configure the environment variables"
@@ -143,6 +144,9 @@ buildah config --cmd "/sbin/init" "$image"
 
 verbose "Commit the image"
 buildah commit "$image" "$image"
+
+verbose "Delete the container"
+buildah rm "$image"
 
 verbose "Done"
 exit $_exit_status_ok

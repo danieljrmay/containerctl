@@ -68,8 +68,5 @@ podman run \
 	--detach \
 	$image
 
-verbose "Delete the container"
-buildah rm "$image"
-
 verbose "Done"
 exit $_exit_status_ok
