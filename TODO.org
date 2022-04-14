@@ -1,5 +1,9 @@
 #+TITLE: containerctl To do List
 * DONE Bullet proof ~containerctl~ command line arguments.
   CLOSED: [2022-03-24 Thu 12:50]
-* NEXT Go through image creation script.
+* TODO Add create-container(-from-image) (with name) command.
+* TODO Add list-containers command.
+* TODO Add bash completeion and fish completion scripts.
+* TODO Go through image creation script.
 * TODO Create ~destroy-image~ command.
+* TODO Port all backdrop-container and backdrop-pod code into this project
