@@ -1,6 +1,17 @@
-#+TITLE: containerctl To do List
+#+TITLE: Container Control To do List
 * DONE Bullet proof ~containerctl~ command line arguments.
   CLOSED: [2022-03-24 Thu 12:50]
+* DONE Port ~drupal-localhost~ to containerctl.
+  CLOSED: [2022-04-20 Wed 12:10]
+* TODO Create ok bash messageing function and refactor scripts to use something like:
+#+begin_src bash
+  debug "Create a the $mydir directory" \
+      && mkdir $mydir \
+      && ok "Created $mydir directory" \
+          || error "Failed to create $mydir directory"
+#+end_src
+* TODO Add upload progress to drupal 7 image via remi repo.
+* TODO See if we can refactor more code into libary.
 * TODO Add create-container(-from-image) (with name) command.
 * TODO Add list-containers command.
 * TODO Add bash completeion and fish completion scripts.

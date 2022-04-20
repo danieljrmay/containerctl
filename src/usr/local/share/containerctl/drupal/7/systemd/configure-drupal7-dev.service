@@ -1,0 +1,11 @@
+[Unit]
+Description=Configure Drupal 7 for development
+After=mariadb.service
+ConditionPathExists=!/var/lock/configure-drupal7-dev.lock
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/configure-drupal7-dev
+
+[Install]
+WantedBy=multi-user.target
