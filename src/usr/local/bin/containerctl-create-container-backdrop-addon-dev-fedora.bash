@@ -69,4 +69,7 @@ podman run \
 	$image
 
 verbose "Done"
+
+msg "You should be able to complete your backdrop container installation at http://localhost:8080"
+
 exit $_exit_status_ok
