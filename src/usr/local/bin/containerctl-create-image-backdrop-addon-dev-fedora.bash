@@ -90,6 +90,8 @@ buildah from --name "$image" registry.fedoraproject.org/fedora:latest
 verbose "Install RPMs and clean up"
 buildah run "$image" -- dnf --assumeyes update
 buildah run "$image" -- dnf --assumeyes install \
+	composer \
+	git \
 	mariadb-server \
 	php \
 	php-fpm \
@@ -98,7 +100,9 @@ buildah run "$image" -- dnf --assumeyes install \
 	php-mbstring \
 	php-mysqlnd \
 	php-pecl-zip \
-	php-xml
+	php-xml \
+	wget \
+	zip
 buildah run "$image" -- dnf --assumeyes clean all
 
 verbose "Copy the backdrop files"
@@ -107,10 +111,20 @@ buildah copy "$image" "${backdrop_dir}/apache/backdrop.conf" /etc/httpd/conf.d/b
 buildah copy "$image" "${backdrop_dir}/systemd/configure-backdrop-dev.bash" /usr/local/bin/configure-backdrop-dev
 buildah copy "$image" "${backdrop_dir}/systemd/configure-backdrop-dev.service" /etc/systemd/system/configure-backdrop-dev.service
 
+verbose "Create module directories"
+buildah run "$image" -- mkdir /var/www/html/modules/{custom,contrib}
+
 verbose "Configure files permissions"
 buildah run "$image" -- chown apache:apache /var/www/html/files
 buildah run "$image" -- chown apache:apache /var/www/html/settings.php
 buildah run "$image" -- chmod a+x /usr/local/bin/configure-backdrop-dev
+
+verbose "Install bee"
+buildah run "$image" -- git clone https://github.com/backdrop-contrib/bee.git /opt/bee
+buildah run "$image" -- ln -s /opt/bee/bee.php /usr/local/bin/bee
+
+verbose "Download contrib modules"
+buildah run "$image" -- bee --root=/var/www/html download coder_review
 
 verbose "Enable services"
 buildah run "$image" -- systemctl enable httpd.service
