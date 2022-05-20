@@ -124,7 +124,13 @@ buildah run "$image" -- git clone https://github.com/backdrop-contrib/bee.git /o
 buildah run "$image" -- ln -s /opt/bee/bee.php /usr/local/bin/bee
 
 verbose "Download contrib modules"
-buildah run "$image" -- bee --root=/var/www/html download coder_review
+buildah run "$image" -- bee --root=/var/www/html download \
+	coder_review \
+	devel \
+	devel_subthemer \
+	devel_debug_log \
+	devel_generate_text_settings \
+	security_review
 
 verbose "Enable services"
 buildah run "$image" -- systemctl enable httpd.service
