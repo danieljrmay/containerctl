@@ -1,0 +1,11 @@
+[Unit]
+Description=Configure Drupal 9 for development
+After=mariadb.service
+ConditionPathExists=!/var/lock/configure-drupal9-dev.lock
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/configure-drupal9-dev
+
+[Install]
+WantedBy=multi-user.target
